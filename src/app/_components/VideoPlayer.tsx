@@ -1,13 +1,15 @@
 "use client";
 
+import { getGeminiResponse } from "@/lib/llms/gemini";
 import { useState } from "react";
 
-export default function VideoPlayer({ code }: { code: string }) {
+export default function VideoPlayer() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const [prompt, setPrompt] = useState("");
   const fetchVideo = async () => {
     setLoading(true);
+    const code = await getGeminiResponse([], prompt);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -27,6 +29,7 @@ export default function VideoPlayer({ code }: { code: string }) {
 
   return (
     <div>
+      <input value={prompt} onChange={(e) => setPrompt(e.target.value)} />
       <button onClick={fetchVideo}>create video</button>
       {loading && <p>Rendering video...</p>}
       {videoUrl && (

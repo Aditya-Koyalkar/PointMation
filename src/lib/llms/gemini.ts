@@ -2,8 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { ChatMessageType } from "@/types/chat";
 import { manimPrompt } from "../prompts/prompt1";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 export async function getGeminiResponse(conversationHistory: ChatMessageType[], prompt: string): Promise<string | null | undefined> {
