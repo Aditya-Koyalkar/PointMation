@@ -10,7 +10,7 @@ export default function VideoPlayer() {
   const fetchVideo = async () => {
     setLoading(true);
     const code = await getGeminiResponse([], prompt);
-    const response = await fetch("/api/generate", {
+    const response = await fetch("http://localhost:5000/api/v1/generate/video", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code }),
