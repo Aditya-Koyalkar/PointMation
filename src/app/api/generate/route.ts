@@ -5,7 +5,6 @@ import fs from "fs-extra";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
-import { Readable } from "stream";
 
 const execPromise = promisify(exec);
 
@@ -20,8 +19,6 @@ export async function POST(req: Request) {
     if (!code) {
       return NextResponse.json({ error: "Manim code is required." }, { status: 400 });
     }
-
-    const jobId = uuidv4();
 
     // Step 1: Create temp directory for this job
     const { path: tempDirPath, cleanup } = await tmpDir({ unsafeCleanup: true });
