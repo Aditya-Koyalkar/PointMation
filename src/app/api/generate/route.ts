@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { dir as tmpDir } from "tmp-promise";
-import { v4 as uuidv4 } from "uuid";
 import fs from "fs-extra";
 import path from "path";
 import { exec } from "child_process";
