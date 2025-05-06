@@ -14,5 +14,5 @@ app.use(cors());
 app.use("/api/v1/generate", generateRoute);
 
 app.listen(PORT, () => {
-  console.log("code worker server is running on port" + PORT);
+  console.log("code worker server is running on port " + PORT);
 });

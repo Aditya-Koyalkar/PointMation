@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/controllers/generate.controller.ts","./src/routes/generate.route.ts","./src/services/generate.service.ts"],"version":"5.8.3"}
