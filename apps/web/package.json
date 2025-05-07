@@ -11,9 +11,11 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@auth/core": "^0.34.2",
     "@google/genai": "^0.12.0",
     "@repo/ui": "*",
     "next": "^15.3.0",
+    "next-auth": "^4.24.11",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
