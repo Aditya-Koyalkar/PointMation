@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getGeminiResponse } from "../../../lib/llms/gemini";
+import { Button } from "@/components/ui/button";
 
 export default function VideoPlayer() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -30,7 +31,7 @@ export default function VideoPlayer() {
   return (
     <div>
       <input value={prompt} onChange={(e) => setPrompt(e.target.value)} />
-      <button onClick={fetchVideo}>create video</button>
+      <Button onClick={fetchVideo}>create video</Button>
       {loading && <p>Rendering video...</p>}
       {videoUrl && (
         <video controls autoPlay className="w-full max-w-xl mt-4">

@@ -20,8 +20,8 @@ declare module "next-auth" {
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT!,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!,
     }),
   ],
   callbacks: {
@@ -89,7 +89,7 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.JWT_SECRET,
 };
 
 const handler = NextAuth(authOptions);
