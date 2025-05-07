@@ -43,12 +43,18 @@ export const authOptions: AuthOptions = {
 
         // If user doesn't exist, create a new one
         if (!existingUser) {
-          await prisma.user.create({
+          const newUser = await prisma.user.create({
             data: {
               email: user.email,
               name: user.name || "",
               image: user.image || null,
               provider: account?.provider === "github" ? "github" : "google",
+            },
+          });
+          await prisma.chat.create({
+            data: {
+              name: "Welcome to Pointmation",
+              userId: newUser.id,
             },
           });
         }
@@ -89,7 +95,7 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.JWT_SECRET,
+  secret: process.env.NEXT_PUBLIC_JWT_SECRET || "mysupersecret",
 };
 
 const handler = NextAuth(authOptions);

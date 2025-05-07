@@ -15,31 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 import { ChevronUp, User2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { ChatType } from "../../../../types/chat";
 
-export const AppSidebar = () => {
+export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
   const { data, status } = useSession();
-  const items = [
-    {
-      id: "12322",
-      name: "My chat",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: "12323",
-      name: "Project Plan",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: "12324",
-      name: "Design Review",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    // Add more chats for scroll behavior
-  ];
-
   return (
     <Sidebar className="w-64 h-screen bg-background border-r flex flex-col border-none">
       <SidebarContent className="flex-1 overflow-y-auto">
@@ -49,9 +28,9 @@ export const AppSidebar = () => {
           </SidebarGroupLabel>
           <SidebarMenu className="space-y-1 px-2 py-5">
             <SidebarMenuButton className={buttonVariants()}>New Chat</SidebarMenuButton>
-            {items.map((item) => (
+            {chats.map((chat) => (
               <SidebarMenuItem
-                key={item.id}
+                key={chat.id}
                 className={cn(
                   buttonVariants({
                     variant: "secondary",
@@ -59,7 +38,7 @@ export const AppSidebar = () => {
                   "text-start justify-start bg-input/0"
                 )}
               >
-                {item.name}
+                {chat.name}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
