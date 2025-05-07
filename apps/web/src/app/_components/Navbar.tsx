@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <header className=" w-full    dark:bg-input/30 dark:border-input ">
-      <div className="container flex h-16 items-center justify-between px-2">
+      <div className="container flex h-14 items-center justify-between px-2">
         <Logo />
         <div className="flex gap-3 items-center">
           {status == "authenticated" ? (
