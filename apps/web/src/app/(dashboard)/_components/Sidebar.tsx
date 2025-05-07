@@ -1,3 +1,91 @@
-export const Sidebar = () => {
-  return <></>;
+"use client";
+import { Logo } from "@/app/_components/Logo";
+import { buttonVariants } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { ChevronUp, User2 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+
+export const AppSidebar = () => {
+  const { data, status } = useSession();
+  const items = [
+    {
+      id: "12322",
+      name: "My chat",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: "12323",
+      name: "Project Plan",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: "12324",
+      name: "Design Review",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    // Add more chats for scroll behavior
+  ];
+
+  return (
+    <Sidebar className="w-64 h-screen bg-background border-r flex flex-col border-none">
+      <SidebarContent className="flex-1 overflow-y-auto">
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <Logo />
+          </SidebarGroupLabel>
+          <SidebarMenu className="space-y-1 px-2 py-5">
+            <SidebarMenuButton className={buttonVariants()}>New Chat</SidebarMenuButton>
+            {items.map((item) => (
+              <SidebarMenuItem
+                key={item.id}
+                className={cn(
+                  buttonVariants({
+                    variant: "secondary",
+                  }),
+                  "text-start justify-start bg-input/0"
+                )}
+              >
+                {item.name}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      {status == "authenticated" && (
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> {data.user.email}
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>{" "}
+        </SidebarFooter>
+      )}
+    </Sidebar>
+  );
 };
