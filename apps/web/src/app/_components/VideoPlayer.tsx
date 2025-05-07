@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getGeminiResponse } from "../../lib/llms/gemini";
+import { getGeminiResponse } from "../../../lib/llms/gemini";
 
 export default function VideoPlayer() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
