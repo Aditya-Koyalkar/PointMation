@@ -4,7 +4,7 @@ import ChatInput from "@/app/_components/PromptBox";
 import { createMessage, revalidateMessages } from "@/lib/actions/message";
 import { useState } from "react";
 
-const PromptBox = ({ chatId }: { chatId: string }) => {
+const PromptBox = ({ chatId, generating }: { chatId: string; generating: boolean }) => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   async function handleCreateMessage() {
@@ -14,7 +14,7 @@ const PromptBox = ({ chatId }: { chatId: string }) => {
     setPrompt("");
     setLoading(false);
   }
-  return <ChatInput loading={loading} onSubmit={handleCreateMessage} prompt={prompt} setPrompt={setPrompt} />;
+  return <ChatInput loading={loading || generating} onSubmit={handleCreateMessage} prompt={prompt} setPrompt={setPrompt} />;
 };
 
 export default PromptBox;

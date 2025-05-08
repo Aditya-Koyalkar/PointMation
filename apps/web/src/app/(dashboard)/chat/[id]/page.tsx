@@ -20,7 +20,7 @@ export default async function ChatPage({ params }: Props) {
         <Messages messages={messages} chatId={id} />
       </div>
       <div className="sticky bottom-0 z-20 bg-muted">
-        <PromptBox chatId={id} />
+        <PromptBox generating={messages.length > 0 && messages[messages.length - 1]?.videoLoading == true} chatId={id} />
       </div>
     </div>
   );
