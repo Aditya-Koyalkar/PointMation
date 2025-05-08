@@ -6,7 +6,7 @@ import { ArrowUp } from "lucide-react";
 export default function ChatInput() {
   return (
     <div className="w-full p-4 rounded-xl shadow-md flex flex-col gap-3">
-      <Textarea placeholder="Type your message here..." className="bg-transparent text-white border border-gray-600 resize-none" />
+      <Textarea autoFocus placeholder="Type your message here..." className="bg-transparent text-white border border-gray-600 " />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Select>
