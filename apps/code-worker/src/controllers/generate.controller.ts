@@ -5,13 +5,16 @@ import { AuthRequest } from "../middlewares/authMiddleware";
 export const generateVideoController = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const body = req.body;
-    const { code, scene = "RightTriangleScene" } = body;
-    if (!code) {
-      res.status(400).json({ error: "Manim code is required." }).status(400);
+    const { code, scene = "RightTriangleScene", chatId, id } = body;
+
+    if (!code || !chatId || !id) {
+      console.log("Required data is not their");
+      res.status(400).json({ error: "Required data is not their" }).status(400);
       return;
     }
-    generateVideoService(code, scene, res);
+    generateVideoService(code, scene, res, chatId, id);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

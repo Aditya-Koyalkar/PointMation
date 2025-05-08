@@ -35,7 +35,7 @@ export default function ChatInput({ onSubmit, prompt, setPrompt, loading }: Chat
         </div>
 
         <div className="flex items-center gap-2">
-          <Button onClick={onSubmit} className=" p-2 rounded-md" disabled={prompt.length < 2 || loading}>
+          <Button onClick={() => onSubmit()} className=" p-2 rounded-md" disabled={prompt.length < 2 || loading}>
             <ArrowUp className="w-4 h-4" />
           </Button>
         </div>

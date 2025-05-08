@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 export async function getGeminiResponse(conversationHistory: MessageType[], prompt: string): Promise<string | null | undefined> {
   try {
     const history = conversationHistory.map((msg) => ({
-      role: msg.role,
+      role: msg.role == "ai" ? "model" : "user",
       parts: [{ text: msg.role == "ai" ? msg.codeOutput || "" : msg.prompt || "" }],
     }));
     const conversation = [
@@ -28,6 +28,7 @@ export async function getGeminiResponse(conversationHistory: MessageType[], prom
       contents: conversation,
     });
     const code = response?.text;
+    console.log(code);
     const cleanedCode = code!
       .replace(/^```[\s\S]*?\n/, "") // remove opening triple backticks and language tag
       .replace(/```$/, ""); // remove closing triple backticks

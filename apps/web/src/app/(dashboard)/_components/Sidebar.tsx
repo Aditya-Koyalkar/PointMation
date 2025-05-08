@@ -43,7 +43,7 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
                 )}
                 onClick={() => redirect(`/chat/${chat.id}`)}
               >
-                {chat.name}
+                {chat.name && chat.name.length > 25 ? chat.name.slice(0, 25) + "..." : chat.name}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>

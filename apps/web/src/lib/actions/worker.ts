@@ -1,8 +1,17 @@
+"use server";
+
+import { getServerSession } from "next-auth";
 import prisma from "../../../../../packages/db/client";
 import { getGeminiResponse } from "../llms/gemini";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import jwt from "jsonwebtoken";
 
 export const initializeCodeCreateandRunning = async (chatId: string, userMessageId: string, aiMessageId: string) => {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      throw Error("Unauthorized access");
+    }
     const [aiMessage, userMessage] = await Promise.all([
       prisma.message.findUnique({ where: { id: aiMessageId, chatId } }),
       prisma.message.findUnique({ where: { id: userMessageId, chatId } }),
@@ -19,7 +28,8 @@ export const initializeCodeCreateandRunning = async (chatId: string, userMessage
         createdAt: "asc",
       },
     });
-    const code = await getGeminiResponse(allMessages, userMessage.prompt || "");
+    const filteredMessages = allMessages.filter((message) => (message.role == "ai" ? message.codeOutput : message.prompt));
+    const code = await getGeminiResponse(filteredMessages, userMessage.prompt || "");
     if (!code) {
       throw Error("Error getting ai response");
     }
@@ -33,28 +43,24 @@ export const initializeCodeCreateandRunning = async (chatId: string, userMessage
         codeOutput: code,
       },
     });
+    const token = jwt.sign(
+      {
+        id: session.user.id,
+        email: session.user.email,
+      },
+      process.env.NEXT_PUBLIC_JWT_SECRET || "mysupersecret",
+      {
+        expiresIn: "1h",
+      }
+    );
     const response = await fetch(`${process.env.NEXT_PUBLIC_WORKER_SERVER_URL}/api/v1/generate/video`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, message_id: aiMessageId, chatId }),
-    });
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ code, id: aiMessageId, chatId }),
+    } as RequestInit);
     if (!response.ok) {
       throw Error("Error generating video");
     }
-
-    const data = await response.json();
-
-    await prisma.message.update({
-      where: {
-        id: aiMessageId,
-        chatId,
-      },
-      data: {
-        videoLoading: false,
-        videoUrl: data.video_url,
-      },
-    });
-
     return {
       message: "Sucessfully generated video",
     };

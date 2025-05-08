@@ -4,11 +4,24 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { Response } from "express";
+import { v2 as cloudinary } from "cloudinary";
+import prisma from "../../../../packages/db/client";
 
 const execPromise = promisify(exec);
 
-export const generateVideoService = async (code: string, scene: string, res: Response) => {
+export const generateVideoService = async (code: string, scene: string, res: Response, chatId: string, messageId: string) => {
   try {
+    const aiMessage = await prisma.message.findUnique({
+      where: {
+        id: messageId,
+        chatId,
+      },
+    });
+
+    if (!aiMessage) {
+      throw Error("Message not found");
+    }
+
     // Step 1: Create temp directory for this job
     const { path: tempDirPath, cleanup } = await tmpDir({ unsafeCleanup: true });
     const dockerMountPath = toDockerPath(tempDirPath);
@@ -33,16 +46,39 @@ export const generateVideoService = async (code: string, scene: string, res: Res
       console.error("Rendered file not found");
       throw new Error("Rendered file not found");
     }
-    // Step 5: Create a stream from the file
-    const videoStream = fs.createReadStream(finalOutputPath);
-    // Step 6: Return the video stream as a response
-    res.set({
-      "Content-Type": "video/mp4",
-      "Content-Disposition": "inline; filename=output.mp4",
+    const cloundinaryResponse = await cloudinary.uploader.upload(finalOutputPath, {
+      resource_type: "video",
     });
-    videoStream.pipe(res);
+
+    const video_url = cloundinaryResponse.secure_url;
+
+    await prisma.message.update({
+      where: {
+        id: messageId,
+        chatId,
+      },
+      data: {
+        videoUrl: video_url,
+        videoLoading: false,
+      },
+    });
+
+    // Step 5: Create a stream from the file
+    // const videoStream = fs.createReadStream(finalOutputPath);
+    // // Step 6: Return the video stream as a response
+    // res.set({
+    //   "Content-Type": "video/mp4",
+    //   "Content-Disposition": "inline; filename=output.mp4",
+    // });
+    // videoStream.pipe(res);
     setTimeout(cleanup, 10_000); // Delay to avoid deleting before stream ends
+    res
+      .json({
+        message: "generated the video sucessfully",
+      })
+      .status(200);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

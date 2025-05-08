@@ -19,10 +19,10 @@ export const authMiddleWare = async (req: AuthRequest, res: Response, next: Next
 
     // Extract the token
     const token = authHeader.split(" ")[1];
-
+    console.log(token);
     // Verify the token
     // IMPORTANT: Use the same secret key as in your Next.js app
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "mysupersecret") as JwtPayload;
+    const decoded = jwt.verify(token || "", process.env.JWT_SECRET || "mysupersecret") as JwtPayload;
 
     if (!decoded || !decoded.id) {
       res.status(401).json({ error: "Unauthorized: No token provided" });
