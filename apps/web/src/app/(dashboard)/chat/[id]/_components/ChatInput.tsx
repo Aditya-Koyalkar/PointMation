@@ -10,6 +10,7 @@ const PromptBox = ({ chatId }: { chatId: string }) => {
   async function handleCreateMessage() {
     setLoading(true);
     await createMessage(prompt, chatId);
+    setPrompt("");
     setLoading(false);
   }
   return <ChatInput loading={loading} onSubmit={handleCreateMessage} prompt={prompt} setPrompt={setPrompt} />;

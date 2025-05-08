@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { generateVideoService } from "../services/generate.service";
 import { AuthRequest } from "../middlewares/authMiddleware";
 
-export const generateVideoController = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const generateVideoController = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const body = req.body;
     const { code, scene = "RightTriangleScene", chatId, id } = body;
@@ -12,7 +12,7 @@ export const generateVideoController = (req: AuthRequest, res: Response, next: N
       res.status(400).json({ error: "Required data is not their" }).status(400);
       return;
     }
-    generateVideoService(code, scene, res, chatId, id);
+    await generateVideoService(code, scene, res, chatId, id, req.user?.id || "");
   } catch (error) {
     console.log(error);
     next(error);

@@ -3,6 +3,8 @@ import cors from "cors";
 import env from "dotenv";
 import generateRoute from "./routes/generate.route";
 import { v2 as cloudinary } from "cloudinary";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 env.config();
 
@@ -15,6 +17,14 @@ cloudinary.config({
 });
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["PUT", "POST", "GET", "DELETE"],
+  },
+});
 
 app.use(express.json());
 app.use(
@@ -24,6 +34,8 @@ app.use(
 );
 app.use("/api/v1/generate", generateRoute);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("code worker server is running on port " + PORT);
 });
+
+export default io;

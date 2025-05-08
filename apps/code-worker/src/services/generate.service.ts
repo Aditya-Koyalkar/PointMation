@@ -6,16 +6,25 @@ import { promisify } from "util";
 import { Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 import prisma from "../../../../packages/db/client";
+import io from "..";
 
 const execPromise = promisify(exec);
 
-export const generateVideoService = async (code: string, scene: string, res: Response, chatId: string, messageId: string) => {
+export const generateVideoService = async (code: string, scene: string, res: Response, chatId: string, messageId: string, userId: string) => {
   try {
     const aiMessage = await prisma.message.findUnique({
       where: {
         id: messageId,
         chatId,
       },
+    });
+    io.on("connection", (socket) => {
+      console.log("User connected: " + socket.id);
+
+      socket.on("join-room", (userId) => {
+        socket.join(userId);
+        console.log(`User ${socket.id} joined room ${userId}`);
+      });
     });
 
     if (!aiMessage) {
@@ -71,6 +80,7 @@ export const generateVideoService = async (code: string, scene: string, res: Res
     //   "Content-Disposition": "inline; filename=output.mp4",
     // });
     // videoStream.pipe(res);
+    io.emit("video-created", "video created");
     setTimeout(cleanup, 10_000); // Delay to avoid deleting before stream ends
     res
       .json({

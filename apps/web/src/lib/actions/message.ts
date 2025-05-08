@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import prisma from "../../../../../packages/db/client";
 import { initializeCodeCreateandRunning } from "./worker";
 import { getGeminiResponse } from "../llms/gemini";
+import { revalidatePath } from "next/cache";
 
 export const createMessage = async (prompt: string, chatId: string) => {
   try {
@@ -79,4 +80,8 @@ export const getAllMessages = async (chatId: string) => {
     console.error("Failed to create a chat", error);
     return null;
   }
+};
+
+export const revalidateMessages = async () => {
+  revalidatePath("/chat");
 };

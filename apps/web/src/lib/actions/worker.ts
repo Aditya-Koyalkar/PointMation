@@ -13,7 +13,7 @@ export const initializeCodeCreateandRunning = async (chatId: string, aiMessageId
       throw Error("Unauthorized access");
     }
     const aiMessage = await prisma.message.findUnique({ where: { id: aiMessageId, chatId } });
-    if (!aiMessage || aiMessage.codeOutput) {
+    if (!aiMessage || !aiMessage.codeOutput) {
       throw Error("error while creating video");
     }
     const token = jwt.sign(

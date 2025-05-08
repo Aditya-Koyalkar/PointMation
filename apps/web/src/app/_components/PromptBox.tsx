@@ -2,7 +2,7 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from "@/components/ui/select";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Loader2 } from "lucide-react";
 type ChatInputProps = {
   onSubmit: () => void;
   prompt: string;
@@ -36,7 +36,7 @@ export default function ChatInput({ onSubmit, prompt, setPrompt, loading }: Chat
 
         <div className="flex items-center gap-2">
           <Button onClick={() => onSubmit()} className=" p-2 rounded-md" disabled={prompt.trim().length < 2 || loading}>
-            <ArrowUp className="w-4 h-4" />
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUp className="w-4 h-4" />}
           </Button>
         </div>
       </div>
