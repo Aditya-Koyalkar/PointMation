@@ -41,6 +41,20 @@ export const initializeCodeCreateandRunning = async (chatId: string, userMessage
     if (!response.ok) {
       throw Error("Error generating video");
     }
+
+    const data = await response.json();
+
+    await prisma.message.update({
+      where: {
+        id: aiMessageId,
+        chatId,
+      },
+      data: {
+        videoLoading: false,
+        videoUrl: data.video_url,
+      },
+    });
+
     return {
       message: "Sucessfully generated video",
     };
