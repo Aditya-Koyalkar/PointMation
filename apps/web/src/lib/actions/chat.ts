@@ -11,7 +11,7 @@ export async function getUserChats() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      redirect("/auth/sigin");
+      redirect("/auth/signin");
     }
     const chats = await prisma.chat.findMany({
       where: {
@@ -33,7 +33,7 @@ export const createChat = async (name: string) => {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      redirect("/auth/sigin");
+      redirect("/auth/signin");
     }
     const chat = prisma.chat.create({
       data: {
@@ -53,7 +53,7 @@ export const deleteChat = async (id: string) => {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      redirect("/auth/sigin");
+      redirect("/auth/signin");
     }
     await prisma.chat.delete({
       where: {

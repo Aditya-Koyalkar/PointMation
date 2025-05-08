@@ -12,7 +12,7 @@ export const createMessage = async (prompt: string, chatId: string) => {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      redirect("/auth/sigin");
+      redirect("/auth/signin");
     }
     const userMessage = await prisma.message.create({
       data: {
@@ -63,9 +63,8 @@ export const createMessage = async (prompt: string, chatId: string) => {
 export const getAllMessages = async (chatId: string) => {
   try {
     const session = await getServerSession(authOptions);
-
     if (!session?.user.id) {
-      redirect("/auth/sigin");
+      redirect("/auth/signin");
     }
     const messages = await prisma.message.findMany({
       where: {
