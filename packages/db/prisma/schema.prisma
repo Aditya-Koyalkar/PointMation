@@ -41,6 +41,9 @@ model Message {
   prompt String?
   codeOutput String?
   videoUrl String?
+  codeLoading Boolean @default(false)
+  videoLoading Boolean @default(false)
+  error Boolean @default(false)
   createdAt DateTime @default(now())
 }
 
