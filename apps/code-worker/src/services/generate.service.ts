@@ -80,7 +80,7 @@ export const generateVideoService = async (code: string, scene: string, res: Res
     //   "Content-Disposition": "inline; filename=output.mp4",
     // });
     // videoStream.pipe(res);
-    io.emit("video-created", "video created");
+    io.to(userId).emit("video-created", "video created");
     setTimeout(cleanup, 10_000); // Delay to avoid deleting before stream ends
     res
       .json({
