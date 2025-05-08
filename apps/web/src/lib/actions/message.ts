@@ -1,11 +1,11 @@
 "use server";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "../../../../../packages/db/client";
 import { initializeCodeCreateandRunning } from "./worker";
 import { getGeminiResponse } from "../llms/gemini";
 import { revalidatePath } from "next/cache";
+import { authOptions } from "../authOptions";
 
 export const createMessage = async (prompt: string, chatId: string) => {
   try {

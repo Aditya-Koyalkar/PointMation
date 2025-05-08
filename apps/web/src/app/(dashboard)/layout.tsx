@@ -3,8 +3,8 @@ import { AppSidebar } from "./_components/Sidebar";
 import { getUserChats } from "@/lib/actions/chat";
 import { Toaster } from "@/components/ui/sonner";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/authOptions";
 
 type Props = {
   children: React.ReactNode;

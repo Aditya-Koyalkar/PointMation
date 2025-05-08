@@ -2,9 +2,9 @@
 
 import { getServerSession } from "next-auth";
 import prisma from "../../../../../packages/db/client";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { authOptions } from "../authOptions";
 
 export async function getUserChats() {
   try {

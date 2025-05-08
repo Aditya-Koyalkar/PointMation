@@ -2,8 +2,8 @@ import { getAllMessages } from "@/lib/actions/message";
 import Messages from "./_components/Messages";
 import PromptBox from "./_components/ChatInput";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/authOptions";
 
 type Props = {
   params: Promise<{ id: string }>;

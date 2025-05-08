@@ -2,9 +2,8 @@
 
 import { getServerSession } from "next-auth";
 import prisma from "../../../../../packages/db/client";
-import { getGeminiResponse } from "../llms/gemini";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import jwt from "jsonwebtoken";
+import { authOptions } from "../authOptions";
 
 export const initializeCodeCreateandRunning = async (chatId: string, aiMessageId: string) => {
   try {
