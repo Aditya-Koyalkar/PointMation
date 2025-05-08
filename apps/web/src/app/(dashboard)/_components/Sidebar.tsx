@@ -22,7 +22,7 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
   const { data, status } = useSession();
 
   return (
-    <Sidebar className="w-64 h-screen bg-background border-r flex flex-col border-none">
+    <Sidebar className="w-64 h-screen border-r flex flex-col border-none">
       <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupLabel>

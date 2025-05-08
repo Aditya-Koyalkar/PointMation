@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useRef } from "react";
 import { MessageType } from "../../../../../../types/chat";
 import MessageItem from "./MessageItem";
 
@@ -6,12 +8,19 @@ type Props = {
 };
 
 const Messages = ({ messages }: Props) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   return (
-    <div>
+    <>
       {messages.map((message) => (
         <MessageItem message={message} />
       ))}
-    </div>
+      <div ref={messagesEndRef}></div>
+    </>
   );
 };
 
