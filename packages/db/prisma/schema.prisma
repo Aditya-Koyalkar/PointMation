@@ -35,7 +35,7 @@ model Chat {
 
 model Message {
   id String @id @default(cuid())
-  chat Chat @relation(fields: [chatId],references: [id])
+  chat Chat @relation(fields: [chatId],references: [id],onDelete: Cascade)
   chatId String
   role Role
   prompt String?

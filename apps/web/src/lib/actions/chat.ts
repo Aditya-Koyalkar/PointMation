@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import prisma from "../../../../../packages/db/client";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function getUserChats() {
   try {
@@ -43,6 +44,25 @@ export const createChat = async (name: string) => {
     return chat;
   } catch (error) {
     console.error("Failed to create a chat", error);
+    return null;
+  }
+};
+
+export const deleteChat = async (id: string) => {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user.id) {
+      redirect("/auth/sigin");
+    }
+    await prisma.chat.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath("/chat");
+  } catch (error) {
+    console.error("Failed to deleting a chat", error);
     return null;
   }
 };

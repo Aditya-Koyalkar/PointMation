@@ -17,6 +17,7 @@ import { ChevronUp, Delete, Trash2, User2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { ChatType } from "../../../../types/chat";
 import { redirect } from "next/navigation";
+import { deleteChat } from "@/lib/actions/chat";
 
 export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
   const { data, status } = useSession();
@@ -45,7 +46,14 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
               >
                 <div className="flex justify-between w-full group">
                   <div>{chat.name && chat.name.length > 20 ? chat.name.slice(0, 20) + "..." : chat.name}</div>
-                  <Button className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" variant={"ghost"}>
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      deleteChat(chat.id);
+                    }}
+                    className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    variant={"ghost"}
+                  >
                     <Trash2 className="w-5 h-5" />
                   </Button>
                 </div>
