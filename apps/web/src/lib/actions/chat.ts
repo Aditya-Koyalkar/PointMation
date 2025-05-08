@@ -1,13 +1,14 @@
 import { getServerSession } from "next-auth";
 import prisma from "../../../../../packages/db/client";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export async function getUserChats() {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user.id) {
-      return [];
+      redirect("/auth/sigin");
     }
     const chats = await prisma.chat.findMany({
       where: {
