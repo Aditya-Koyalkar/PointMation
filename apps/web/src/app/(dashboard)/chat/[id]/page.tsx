@@ -1,7 +1,9 @@
 import { getAllMessages } from "@/lib/actions/message";
 import Messages from "./_components/Messages";
 import PromptBox from "./_components/ChatInput";
-import useWebsocket from "@/hooks/use-websocket";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -9,6 +11,10 @@ type Props = {
 
 export default async function ChatPage({ params }: Props) {
   const { id } = await params;
+  const session = await getServerSession(authOptions);
+  if (!session?.user.id) {
+    redirect("/auth/signin");
+  }
   const messages = await getAllMessages(id);
   if (!messages) {
     return "There was an error.";
