@@ -2,6 +2,9 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "./_components/Sidebar";
 import { getUserChats } from "@/lib/actions/chat";
 import { Toaster } from "@/components/ui/sonner";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;
@@ -9,6 +12,10 @@ type Props = {
 
 export default async function Layout({ children }: Props) {
   const chats = await getUserChats();
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/auth/signin");
+  }
   return (
     <SidebarProvider>
       <AppSidebar chats={chats} />

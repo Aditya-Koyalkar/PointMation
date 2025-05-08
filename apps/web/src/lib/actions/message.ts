@@ -64,7 +64,15 @@ export const getAllMessages = async (chatId: string) => {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user.id) {
-      redirect("/auth/signin");
+      return redirect("/auth/signin");
+    }
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
+      },
+    });
+    if (!chat) {
+      redirect("/chat");
     }
     const messages = await prisma.message.findMany({
       where: {
