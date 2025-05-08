@@ -40,18 +40,18 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
                   buttonVariants({
                     variant: "secondary",
                   }),
-                  "text-start justify-start bg-input/0"
+                  "text-start justify-start bg-input/0 group"
                 )}
                 onClick={() => redirect(`/chat/${chat.id}`)}
               >
-                <div className="flex justify-between w-full group">
+                <div className="flex justify-between w-full">
                   <div>{chat.name && chat.name.length > 20 ? chat.name.slice(0, 20) + "..." : chat.name}</div>
                   <Button
                     onClick={(e) => {
                       e.preventDefault();
                       deleteChat(chat.id);
                     }}
-                    className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="w-5 h-5 opacity-SW transition-opacity"
                     variant={"ghost"}
                   >
                     <Trash2 className="w-5 h-5" />
