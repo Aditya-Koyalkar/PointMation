@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "../../../../../packages/db/client";
 import { initializeCodeCreateandRunning } from "./worker";
+import { getGeminiResponse } from "../llms/gemini";
 
 export const createMessage = async (prompt: string, chatId: string) => {
   try {
@@ -27,8 +28,31 @@ export const createMessage = async (prompt: string, chatId: string) => {
         videoLoading: true,
       },
     });
+    const allMessages = await prisma.message.findMany({
+      where: {
+        chatId,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    const filteredMessages = allMessages.filter((message) => (message.role == "ai" ? message.codeOutput : message.prompt));
+    const code = await getGeminiResponse(filteredMessages, userMessage.prompt || "");
+    if (!code) {
+      throw Error("Error getting ai response");
+    }
+    await prisma.message.update({
+      where: {
+        id: aiMessage.id,
+        chatId,
+      },
+      data: {
+        codeLoading: false,
+        codeOutput: code,
+      },
+    });
 
-    initializeCodeCreateandRunning(chatId, userMessage.id, aiMessage.id);
+    initializeCodeCreateandRunning(chatId, aiMessage.id);
   } catch (error) {
     console.error("Failed to create a message", error);
     return null;

@@ -6,43 +6,16 @@ import { getGeminiResponse } from "../llms/gemini";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import jwt from "jsonwebtoken";
 
-export const initializeCodeCreateandRunning = async (chatId: string, userMessageId: string, aiMessageId: string) => {
+export const initializeCodeCreateandRunning = async (chatId: string, aiMessageId: string) => {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
       throw Error("Unauthorized access");
     }
-    const [aiMessage, userMessage] = await Promise.all([
-      prisma.message.findUnique({ where: { id: aiMessageId, chatId } }),
-      prisma.message.findUnique({ where: { id: userMessageId, chatId } }),
-    ]);
-
-    if (!aiMessage || !userMessage) {
-      throw Error("Message not found");
+    const aiMessage = await prisma.message.findUnique({ where: { id: aiMessageId, chatId } });
+    if (!aiMessage || aiMessage.codeOutput) {
+      throw Error("error while creating video");
     }
-    const allMessages = await prisma.message.findMany({
-      where: {
-        chatId,
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    });
-    const filteredMessages = allMessages.filter((message) => (message.role == "ai" ? message.codeOutput : message.prompt));
-    const code = await getGeminiResponse(filteredMessages, userMessage.prompt || "");
-    if (!code) {
-      throw Error("Error getting ai response");
-    }
-    await prisma.message.update({
-      where: {
-        id: aiMessageId,
-        chatId,
-      },
-      data: {
-        codeLoading: false,
-        codeOutput: code,
-      },
-    });
     const token = jwt.sign(
       {
         id: session.user.id,
@@ -56,7 +29,7 @@ export const initializeCodeCreateandRunning = async (chatId: string, userMessage
     const response = await fetch(`${process.env.NEXT_PUBLIC_WORKER_SERVER_URL}/api/v1/generate/video`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ code, id: aiMessageId, chatId }),
+      body: JSON.stringify({ code: aiMessage.codeOutput, id: aiMessageId, chatId }),
     } as RequestInit);
     if (!response.ok) {
       throw Error("Error generating video");
