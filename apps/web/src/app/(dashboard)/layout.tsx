@@ -1,6 +1,7 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/Sidebar";
 import { getUserChats } from "@/lib/actions/chat";
+import { Toaster } from "@/components/ui/sonner";
 
 type Props = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export default async function Layout({ children }: Props) {
           <SidebarTrigger className="-ml-1" />
         </div>
         <main className="px-4 bg-input/50 h-full w-full">{children}</main>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

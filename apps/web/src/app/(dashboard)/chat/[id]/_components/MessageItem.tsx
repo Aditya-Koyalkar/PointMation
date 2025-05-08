@@ -1,12 +1,9 @@
 "use client";
 
 import { MessageType } from "../../../../../../types/chat";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, Loader2, User2 } from "lucide-react";
-import { useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
@@ -15,14 +12,13 @@ type Props = {
 };
 
 const MessageItem = ({ message }: Props) => {
-  const [copied, setCopied] = useState(false);
-
   const handleCopy = () => {
     if (message.codeOutput) {
       navigator.clipboard.writeText(message.codeOutput);
-      setCopied(true);
-      toast.success("Code copied to clipboard!");
-      setTimeout(() => setCopied(false), 1500);
+      toast("Copied!", {
+        position: "bottom-right",
+        description: "code copied to clipboard",
+      });
     }
   };
 
@@ -45,7 +41,7 @@ const MessageItem = ({ message }: Props) => {
         <div className="justify-self-start">
           <div className="bg-muted p-2 ">
             <div className="flex justify-end">
-              <Button size={"icon"} disabled={message.codeLoading}>
+              <Button onClick={handleCopy} size={"icon"} disabled={message.codeLoading}>
                 <Copy />
               </Button>
             </div>
