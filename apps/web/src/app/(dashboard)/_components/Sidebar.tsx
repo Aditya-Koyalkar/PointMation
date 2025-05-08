@@ -16,9 +16,11 @@ import { cn } from "@/lib/utils";
 import { ChevronUp, User2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { ChatType } from "../../../../types/chat";
+import { redirect } from "next/navigation";
 
 export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
   const { data, status } = useSession();
+
   return (
     <Sidebar className="w-64 h-screen bg-background border-r flex flex-col border-none">
       <SidebarContent className="flex-1 overflow-y-auto">
@@ -37,6 +39,7 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
                   }),
                   "text-start justify-start bg-input/0"
                 )}
+                onClick={() => redirect(`/chat/${chat.id}`)}
               >
                 {chat.name}
               </SidebarMenuItem>
@@ -55,9 +58,10 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
+                <DropdownMenuContent side="top">
                   <DropdownMenuItem onClick={() => signOut()}>
-                    <span>Sign out</span>
+                    <User2 />
+                    Sign out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
