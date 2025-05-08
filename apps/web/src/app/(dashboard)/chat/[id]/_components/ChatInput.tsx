@@ -1,7 +1,7 @@
 "use client";
 
 import ChatInput from "@/app/_components/PromptBox";
-import { createMessage } from "@/lib/actions/message";
+import { createMessage, revalidateMessages } from "@/lib/actions/message";
 import { useState } from "react";
 
 const PromptBox = ({ chatId }: { chatId: string }) => {
@@ -10,6 +10,7 @@ const PromptBox = ({ chatId }: { chatId: string }) => {
   async function handleCreateMessage() {
     setLoading(true);
     await createMessage(prompt, chatId);
+    await revalidateMessages(chatId);
     setPrompt("");
     setLoading(false);
   }

@@ -17,7 +17,7 @@ export default async function ChatPage({ params }: Props) {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex-1 overflow-y-auto">
-        <Messages messages={messages} />
+        <Messages messages={messages} chatId={id} />
       </div>
       <div className="sticky bottom-0 z-20 bg-muted">
         <PromptBox chatId={id} />

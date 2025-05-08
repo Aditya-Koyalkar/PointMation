@@ -82,6 +82,6 @@ export const getAllMessages = async (chatId: string) => {
   }
 };
 
-export const revalidateMessages = async () => {
-  revalidatePath("/chat");
+export const revalidateMessages = async (chatId: string) => {
+  revalidatePath(`/chat/${chatId}`);
 };

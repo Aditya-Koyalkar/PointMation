@@ -8,9 +8,10 @@ import { revalidateMessages } from "@/lib/actions/message";
 
 type Props = {
   messages: MessageType[];
+  chatId: string;
 };
 
-const Messages = ({ messages }: Props) => {
+const Messages = ({ messages, chatId }: Props) => {
   const { data } = useSession();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -19,7 +20,7 @@ const Messages = ({ messages }: Props) => {
     }
   }, [messages]);
   useWebsocket(() => {
-    revalidateMessages();
+    revalidateMessages(chatId);
   }, data?.user.id);
   return (
     <>
