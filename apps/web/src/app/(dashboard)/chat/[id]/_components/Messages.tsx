@@ -7,11 +7,11 @@ type Props = {
 
 const Messages = ({ messages }: Props) => {
   return (
-    <>
+    <div>
       {messages.map((message) => (
         <MessageItem message={message} />
       ))}
-    </>
+    </div>
   );
 };
 
