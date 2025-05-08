@@ -29,7 +29,9 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
             <Logo />
           </SidebarGroupLabel>
           <SidebarMenu className="space-y-1 px-2 py-5">
-            <SidebarMenuButton className={buttonVariants()}>New Chat</SidebarMenuButton>
+            <SidebarMenuButton className={buttonVariants()} onClick={() => redirect("/chat")}>
+              New Chat
+            </SidebarMenuButton>
             {chats.map((chat) => (
               <SidebarMenuItem
                 key={chat.id}

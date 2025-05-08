@@ -1,12 +1,24 @@
+"use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { ArrowUp } from "lucide-react";
-
-export default function ChatInput() {
+type ChatInputProps = {
+  onSubmit: () => void;
+  prompt: string;
+  setPrompt: (prompt: string) => void;
+  loading: boolean;
+};
+export default function ChatInput({ onSubmit, prompt, setPrompt, loading }: ChatInputProps) {
   return (
     <div className="w-full p-4 rounded-xl shadow-md flex flex-col gap-3">
-      <Textarea autoFocus placeholder="Type your message here..." className="bg-transparent text-white border border-gray-600 " />
+      <Textarea
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        autoFocus
+        placeholder="Type your message here..."
+        className="bg-transparent text-white border border-gray-600"
+      />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Select>
@@ -23,7 +35,7 @@ export default function ChatInput() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button className=" p-2 rounded-md">
+          <Button onClick={onSubmit} className=" p-2 rounded-md" disabled={prompt.length < 2 || loading}>
             <ArrowUp className="w-4 h-4" />
           </Button>
         </div>

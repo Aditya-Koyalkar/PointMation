@@ -24,3 +24,23 @@ export async function getUserChats() {
     return [];
   }
 }
+
+export const createChat = async (name: string) => {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user.id) {
+      redirect("/auth/sigin");
+    }
+    const chat = prisma.chat.create({
+      data: {
+        name,
+        userId: session.user.id,
+      },
+    });
+    return chat;
+  } catch (error) {
+    console.error("Failed to create a chat", error);
+    return null;
+  }
+};

@@ -5,3 +5,16 @@ export interface ChatType {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface MessageType {
+  id: string;
+  chatId: String;
+  role: "ai" | "user";
+  prompt?: string | null;
+  codeOutput?: string | null;
+  videoUrl?: string | null;
+  codeLoading: boolean;
+  videoLoading: boolean;
+  error: boolean;
+  createdAt: Date;
+}
