@@ -6,6 +6,7 @@ import { initializeCodeCreateandRunning } from "./worker";
 import { getGeminiResponse } from "../llms/gemini";
 import { revalidatePath } from "next/cache";
 import { authOptions } from "../authOptions";
+import { MessageType } from "types/chat";
 
 export const createMessage = async (prompt: string, chatId: string) => {
   try {
@@ -37,7 +38,7 @@ export const createMessage = async (prompt: string, chatId: string) => {
         createdAt: "asc",
       },
     });
-    const filteredMessages = allMessages.filter((message) => (message.role == "ai" ? message.codeOutput : message.prompt));
+    const filteredMessages = allMessages.filter((message: MessageType) => (message.role == "ai" ? message.codeOutput : message.prompt));
     const code = await getGeminiResponse(filteredMessages, userMessage.prompt || "");
     if (!code) {
       throw Error("Error getting ai response");
