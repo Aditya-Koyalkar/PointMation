@@ -68,7 +68,8 @@
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",
     "vaul": "^1.1.2",
-    "zod": "^3.24.4"
+    "zod": "^3.24.4",
+    "@repo/db": "*"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
