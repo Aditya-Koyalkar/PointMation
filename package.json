@@ -8,6 +8,12 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
+  "dependencies": {
+    "@repo/typescript-config": "*",
+    "@repo/code-worker": "*",
+    "@repo/web": "*",
+    "@repo/ui": "*"
+  },
   "devDependencies": {
     "prettier": "^3.5.3",
     "turbo": "^2.5.2",

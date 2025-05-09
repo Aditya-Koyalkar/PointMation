@@ -1,11 +1,13 @@
 {
-  "name": "code-worker",
+  "name": "@repo/code-worker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc -b && node dist/apps/code-worker/src/index.js"
+    "dev": "docker run -p 4000:4000 code-worker",
+    "start": "tsc -b &&  node dist/apps/code-worker/src/index.js ",
+    "build": "tsc -b"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +25,9 @@
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "socket.io": "^4.8.1",
-    "tmp-promise": "^3.0.3"
+    "tmp-promise": "^3.0.3",
+    "@repo/db": "*",
+    "web": "*"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
