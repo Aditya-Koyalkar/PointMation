@@ -1,20 +1,26 @@
-# Base image with Python and Node.js
-FROM node:18-bullseye
+# 1. Start from a slim Python base
+FROM python:3.10-slim
 
-# Install system dependencies for Manim
-RUN apt-get update && apt-get install -y \
-    python3-pip \
-    ffmpeg \
-    libcairo2 \
-    pango1.0-tools \
-    fonts-freefont-ttf \
-    texlive \
-    texlive-latex-extra \
-    git \
+# 2. Install system deps: Node.js, Manim prerequisites, LaTeX, FFmpeg
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      curl gnupg ca-certificates \
+      ffmpeg \
+      libcairo2-dev pkg-config libpango1.0-dev libgdk-pixbuf2.0-0 libffi-dev \
+      texlive texlive-latex-extra texlive-fonts-recommended \
+      git build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# 3. Install Node.js LTS
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get update && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. Install Manim
+RUN pip install --upgrade pip \
+    && pip install manim
+    
 # Install Manim
-RUN pip install manim
 
 RUN npm install -g bun
 
