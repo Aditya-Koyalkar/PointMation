@@ -68,15 +68,7 @@ export const generateVideoService = async (code: string, scene: string, res: Res
       },
     });
 
-    // Step 5: Create a stream from the file
-    // const videoStream = fs.createReadStream(finalOutputPath);
-    // // Step 6: Return the video stream as a response
-    // res.set({
-    //   "Content-Type": "video/mp4",
-    //   "Content-Disposition": "inline; filename=output.mp4",
-    // });
-    // videoStream.pipe(res);
-    io.to(userId).emit("video-created", "video created");
+    io.to(userId).emit("code-worker", "video created");
     setTimeout(cleanup, 10_000); // Delay to avoid deleting before stream ends
     res
       .json({
@@ -84,7 +76,16 @@ export const generateVideoService = async (code: string, scene: string, res: Res
       })
       .status(200);
   } catch (error) {
-    console.log(error);
+    await prisma.message.update({
+      where: {
+        id: messageId,
+        chatId,
+      },
+      data: {
+        error: true,
+      },
+    });
+    io.to(userId).emit("code-worker", "video creation failed");
     throw error;
   }
 };

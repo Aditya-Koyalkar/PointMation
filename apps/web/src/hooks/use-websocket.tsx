@@ -21,7 +21,7 @@ function useWebsocket(callback: () => void, key?: unknown) {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
 
-    socket.on("video-created", () => {
+    socket.on("code-worker", () => {
       console.log("Video created event received");
       callback();
     });

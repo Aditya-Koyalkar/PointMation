@@ -43,18 +43,12 @@ export const authOptions: AuthOptions = {
 
         // If user doesn't exist, create a new one
         if (!existingUser) {
-          const newUser = await prisma.user.create({
+          await prisma.user.create({
             data: {
               email: user.email,
               name: user.name || "",
               image: user.image || null,
               provider: account?.provider === "github" ? "github" : "google",
-            },
-          });
-          await prisma.chat.create({
-            data: {
-              name: "Welcome to Pointmation",
-              userId: newUser.id,
             },
           });
         }
