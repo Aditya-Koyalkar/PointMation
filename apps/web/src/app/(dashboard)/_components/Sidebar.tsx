@@ -13,24 +13,33 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { ChevronUp, Delete, Loader2, Trash2, User2 } from "lucide-react";
+import { ChevronUp, Loader2, Trash2, User2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { ChatType } from "../../../../types/chat";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { deleteChat } from "@/lib/actions/chat";
 import { useState } from "react";
 
 export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
   const { data, status } = useSession();
   const pathname = usePathname();
-  const [loading, setIsLoading] = useState(false);
-  const handleDeleteChat = (e: React.MouseEvent, chatId: string) => {
-    setIsLoading(true);
+  const [loadingChatId, setLoadingChatId] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleDeleteChat = async (e: React.MouseEvent, chatId: string) => {
     e.stopPropagation(); // Prevent the click from bubbling to the parent element
-    deleteChat(chatId);
-    setIsLoading(false);
-    if (pathname === `/chat/${chatId}`) {
-      redirect("/chat");
+
+    try {
+      setLoadingChatId(chatId);
+      await deleteChat(chatId);
+
+      if (pathname === `/chat/${chatId}`) {
+        router.push("/chat");
+      }
+    } catch (error) {
+      console.error("Failed to delete chat:", error);
+    } finally {
+      setLoadingChatId(null);
     }
   };
   return (
@@ -41,7 +50,7 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
             <Logo />
           </SidebarGroupLabel>
           <SidebarMenu className="space-y-1 px-2 py-5">
-            <SidebarMenuButton className={buttonVariants()} onClick={() => redirect("/chat")}>
+            <SidebarMenuButton className={buttonVariants()} onClick={() => router.push("/chat")}>
               New Chat
             </SidebarMenuButton>
             {chats.map((chat) => (
@@ -54,17 +63,17 @@ export const AppSidebar = ({ chats }: { chats: ChatType[] }) => {
                   "text-start justify-start bg-input/0 group",
                   pathname === `/chat/${chat.id}` && "bg-accent"
                 )}
-                onClick={() => redirect(`/chat/${chat.id}`)}
+                onClick={() => router.push(`/chat/${chat.id}`)}
               >
                 <div className="flex justify-between w-full">
                   <div>{chat.name && chat.name.length > 20 ? chat.name.slice(0, 20) + "..." : chat.name}</div>
                   <Button
-                    disabled={loading}
+                    disabled={loadingChatId === chat.id}
                     onClick={(e) => handleDeleteChat(e, chat.id)}
                     className="w-5 h-5 opacity-SW transition-opacity"
                     variant={"ghost"}
                   >
-                    {loading ? <Loader2 className="animate-spin" /> : <Trash2 className="w-5 h-5" />}
+                    {loadingChatId === chat.id ? <Loader2 className="animate-spin" /> : <Trash2 className="w-5 h-5" />}
                   </Button>
                 </div>
               </SidebarMenuItem>
