@@ -52,6 +52,7 @@ export const generateVideoService = async (code: string, scene: string, res: Res
         },
         data: {
           error: true,
+          videoLoading: false,
         },
       });
       io.to(userId).emit("code-worker", "video creation failed");
@@ -103,6 +104,7 @@ export const generateVideoService = async (code: string, scene: string, res: Res
       },
       data: {
         error: true,
+        videoLoading: false,
       },
     });
     io.to(userId).emit("code-worker", "video creation failed");
