@@ -40,8 +40,13 @@ export const generateVideoService = async (code: string, scene: string, res: Res
     // 3. Render with Manim CLI
     const cmd = `manim ${filePath} ${scene} -o output.mp4 -ql`;
     console.log(`Running: ${cmd}`);
-    await execPromise(cmd, { cwd: tempDirPath });
 
+    const { stderr } = await execPromise(cmd, { cwd: tempDirPath });
+
+    if (stderr && stderr.toLowerCase().includes("error")) {
+      console.error("stderr:", stderr);
+      throw new Error("Manim execution failed:\n" + stderr);
+    }
     // Find output
     const outputPath = path.join(tempDirPath, "output.mp4");
     const fallbackPath = path.join(tempDirPath, "media/videos/main/480p15/output.mp4");
