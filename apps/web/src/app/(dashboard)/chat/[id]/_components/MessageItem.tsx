@@ -65,6 +65,10 @@ const MessageItem = ({ message }: Props) => {
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">Generating animation...</p>
               </div>
+            ) : message.error ? (
+              <div className="flex flex-col items-center gap-2 pt-10">
+                <div className="w-1/2 text-center border-1 border-red-400 p-2 rounded-md text-red-500">Error Generating animation</div>
+              </div>
             ) : (
               message.videoUrl && <video src={message.videoUrl!} controls />
             )}

@@ -40,12 +40,27 @@ export const generateVideoService = async (code: string, scene: string, res: Res
     // 3. Render with Manim CLI
     const cmd = `manim ${filePath} ${scene} -o output.mp4 -ql`;
     console.log(`Running: ${cmd}`);
+    let stdErr = "";
+    try {
+      const { stderr } = await execPromise(cmd, { cwd: tempDirPath });
+      stdErr = stderr;
+    } catch (error) {
+      await prisma.message.update({
+        where: {
+          id: messageId,
+          chatId,
+        },
+        data: {
+          error: true,
+        },
+      });
+      io.to(userId).emit("code-worker", "video creation failed");
+      throw new Error("Error compailing the manim file");
+    }
 
-    const { stderr } = await execPromise(cmd, { cwd: tempDirPath });
-
-    if (stderr && stderr.toLowerCase().includes("error")) {
-      console.error("stderr:", stderr);
-      throw new Error("Manim execution failed:\n" + stderr);
+    if (stdErr && stdErr.toLowerCase().includes("error")) {
+      console.error("stderr:", stdErr);
+      throw new Error("Manim execution failed:\n" + stdErr);
     }
     // Find output
     const outputPath = path.join(tempDirPath, "output.mp4");
