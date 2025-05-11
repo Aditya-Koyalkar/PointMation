@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const prompts = ["Create a Animation of a cylinder rotating.", "Create a animation of a Circle rotating."];
+const prompts = ["Bubble Sort Algorithm Visualization", "Create a animation of a Triangle rotating", "Pythagoras Theorem Visualization"];
 
 const MainChatPage = () => {
   const [prompt, setPrompt] = useState("");
@@ -25,7 +25,7 @@ const MainChatPage = () => {
   }
   return (
     <>
-      <div className="flex-1 flex flex-col items-center mt-10">
+      <div className="flex-1 flex flex-col items-center justify-end mt-10">
         <h1 className="text-3xl font-semibold mb-6">How can I help you?</h1>
         <div className="w-full max-w-xl gap-3 flex flex-col">
           {prompts.map((text, idx) => (

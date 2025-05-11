@@ -2,7 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import Navbar from "./_components/Navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function Home() {
   return (
@@ -21,27 +22,43 @@ export default function Home() {
                     Turn Text Prompts Into Stunning Animated Videos
                   </h1>
                   <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Pointmation uses AI to generate beautiful mathematical animations from simple text prompts, powered by manim code.
+                    Pointmation uses AI to generate beautiful mathematical animations from simple text prompts, powered by{" "}
+                    <Badge variant={"secondary"}>manim code</Badge>
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button size="lg" asChild>
-                    <Link href="#demo">
-                      Try Demo <ArrowRight className="ml-2 h-4 w-4" />
+                    <Link href={"/chat"}>
+                      Try Now <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
                 </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div className="relative w-full aspect-video overflow-hidden rounded-xl border bg-gradient-to-br from-purple-50 via-white to-blue-50 p-2 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Sparkles className="h-24 w-24 text-purple-500 opacity-50" />
+                <div className="flex flex-wrap gap-4 mt-4">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    <span className="text-sm">No coding required</span>
                   </div>
-                  <div className="absolute inset-0 bg-white/50 backdrop-blur-sm dark:bg-black/50"></div>
-                  <div className="relative flex h-full w-full items-center justify-center rounded-lg border bg-white/80 dark:bg-gray-950/80">
-                    <Play className="h-16 w-16 text-purple-600 dark:text-purple-400" />
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    <span className="text-sm">Instant generation</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    <span className="text-sm">High-quality output</span>
                   </div>
                 </div>
+              </div>
+              <div className="flex items-center justify-center">
+                <AspectRatio ratio={16 / 9}>
+                  <video
+                    className="h-full w-full object-cover rounded-lg"
+                    loop
+                    autoPlay
+                    muted
+                    playsInline
+                    src="https://res.cloudinary.com/dae31fk75/video/upload/v1746950365/c5lc7n9zjxjm6dpmv2oe.mp4"
+                  />
+                </AspectRatio>
               </div>
             </div>
           </div>
