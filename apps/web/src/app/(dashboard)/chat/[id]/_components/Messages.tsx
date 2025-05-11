@@ -23,12 +23,12 @@ const Messages = ({ messages, chatId }: Props) => {
     revalidateMessages(chatId);
   }, data?.user.id);
   return (
-    <>
+    <div>
       {messages.map((message) => (
         <MessageItem message={message} />
       ))}
       <div ref={messagesEndRef}></div>
-    </>
+    </div>
   );
 };
 
