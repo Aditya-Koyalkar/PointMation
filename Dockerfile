@@ -11,6 +11,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       git build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+ RUN apt-get update && apt-get install -y \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-latex-recommended \
+    dvipng \
+    dvisvgm \
+    cm-super \
+    && apt-get clean
+
+
 # 3. Install Node.js LTS
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get update && apt-get install -y nodejs \
