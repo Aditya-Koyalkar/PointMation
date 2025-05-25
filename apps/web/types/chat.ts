@@ -12,6 +12,7 @@ export interface MessageType {
   role: "ai" | "user";
   prompt?: string | null;
   codeOutput?: string | null;
+  codeExplanation?: string | null;
   videoUrl?: string | null;
   codeLoading: boolean;
   videoLoading: boolean;
